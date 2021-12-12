@@ -37,10 +37,13 @@ async def filter_job_post(job):
     hastag = "#software"
     if(hastag in job and [k for k in keywords if k in job]):
         return True
+    return True
 
 
 @client.on(events.NewMessage(chats=int(config.FREELANCE_ETHIOPIA_CHANNEL_ID)))
 async def freelance_ethiopia_channel(event):
+    print(event.text)
+    print(event.message.reply_markup)
     channel = await client.get_entity(int(config.FREELANCE_ETHIOPIA_CHANNEL_ID))
     url = f"https://t.me/{channel.username}/{event.message.id}"
     job = event.text.replace("\n", "").strip()
@@ -52,8 +55,10 @@ async def freelance_ethiopia_channel(event):
                 job_description = i
 
         if(isinstance(account.status, UserStatusOffline)):
+            print("offline")
             await send_sms(me, job_description, url)
         if(isinstance(account.status, UserStatusOnline)):
+            print("online")
             await send_sms(me, job_description, url)
 
 
